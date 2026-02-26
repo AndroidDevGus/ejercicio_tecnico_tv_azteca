@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -37,9 +40,25 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/INDEX.LIST",
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/*.kotlin_module",
+                "META-INF/io.netty.versions.properties"
+            )
+        }
+    }
 }
 
 dependencies {
+    // ── Existentes ──────────────────────────
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -48,6 +67,23 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    // ── Hilt ────────────────────────────────
+    implementation(libs.hilt.android)
+    implementation(libs.firebase.appdistribution.gradle)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    // ── Retrofit + OkHttp ───────────────────
+    implementation(libs.bundles.retrofit)
+
+    // ── ViewModel Compose ───────────────────
+    implementation(libs.lifecycle.viewmodel.compose)
+
+    // ── Coroutines ──────────────────────────
+    implementation(libs.coroutines.android)
+
+    // ── Tests ───────────────────────────────
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -55,4 +91,10 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation(libs.coil.compose)
+
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.kotlinx.serialization.json)
+
 }
